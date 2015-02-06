@@ -1,7 +1,7 @@
 // Ultrasonic - Library for HR-SC04 Ultrasonic Ranging Module.
 // GitHub: https://github.com/JRodrigoTech/Ultrasonic-HC-SR04
 // #### LICENSE ####
-// This code is licensed under Creative Commons Share alike 
+// This code is licensed under Creative Commons Share alike
 // and Attribution by J.Rodrigo ( http://www.jrodrigo.net ).
 
 #if ARDUINO >= 100
@@ -19,6 +19,7 @@ Ultrasonic::Ultrasonic(int TP, int EP)
    Trig_pin=TP;
    Echo_pin=EP;
    Time_out=3000;  // 30ms = 5 m // 3ms = 50cm
+   Reset_pin=0;
 }
 
 Ultrasonic::Ultrasonic(int TP, int EP, long TO)
@@ -28,6 +29,27 @@ Ultrasonic::Ultrasonic(int TP, int EP, long TO)
    Trig_pin=TP;
    Echo_pin=EP;
    Time_out=TO;
+   Reset_pin=0;
+}
+
+Ultrasonic::Ultrasonic(int TP, int EP, int sys, int MAX_DIST)
+{
+  pinMode(TP,OUTPUT);
+  pinMode(EP,INPUT);
+  Trig_pin=TP;
+  Echo_pin=EP;
+  if(sys){
+    Time_out=MAX_DIST*2*29;
+  }else{
+    Time_out=MAX_DIST*2*79;
+  }
+  Reset_pin=0;
+}
+
+void Ultrasonic::onReset(int RP)
+{
+  pinMode(RP,OUTPUT);
+  Reset_pin = RP;
 }
 
 long Ultrasonic::Timing()
@@ -39,7 +61,14 @@ long Ultrasonic::Timing()
   digitalWrite(Trig_pin, LOW);
   duration = pulseIn(Echo_pin,HIGH,Time_out);
   if ( duration == 0 ) {
-	duration = Time_out; }
+    duration = Time_out;
+    if(Reset_pin != 0){
+      digitalWrite(Reset_pin,HIGH);
+      delay(25);
+      digitalWrite(Reset_pin,LOW);
+      delay(225);
+    }
+  }
   return duration;
 }
 
@@ -47,9 +76,10 @@ long Ultrasonic::Ranging(int sys)
 {
   Timing();
   if (sys) {
-	distacne_cm = duration /29 / 2 ;
-	return distacne_cm;
+	  distacne_cm = duration /29 / 2 ;
+	  return distacne_cm;
   } else {
-	distance_inc = duration / 74 / 2;
-	return distance_inc; }
+	  distance_inc = duration / 74 / 2;
+	  return distance_inc;
+  }
 }

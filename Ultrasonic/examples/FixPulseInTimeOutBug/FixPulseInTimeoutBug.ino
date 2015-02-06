@@ -13,11 +13,12 @@
 
 #include <Ultrasonic.h>
 
-Ultrasonic ultrasonic(9,8,CM,20); // (Trig PIN,Echo PIN,CM or INC,Distance)
+Ultrasonic ultrasonic(9,8); // (Trig PIN,Echo PIN)
 
 void setup() {
   Serial.begin(9600);
-  ultrasonic.onReset(7);  // (Reset PIN)
+  ultrasonic.setResetPin(7);  // (Reset PIN)
+  ultrasonic.setMaxDistance(CM,20); //(Unit:CM or INC,Max_distance)
 }
 
 void loop()

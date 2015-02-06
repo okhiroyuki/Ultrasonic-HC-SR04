@@ -32,21 +32,16 @@ Ultrasonic::Ultrasonic(int TP, int EP, long TO)
    Reset_pin=0;
 }
 
-Ultrasonic::Ultrasonic(int TP, int EP, int sys, int MAX_DIST)
+void Ultrasonic::setMaxDistance(int sys, int max_dist)
 {
-  pinMode(TP,OUTPUT);
-  pinMode(EP,INPUT);
-  Trig_pin=TP;
-  Echo_pin=EP;
-  if(sys){
-    Time_out=MAX_DIST*2*29;
-  }else{
-    Time_out=MAX_DIST*2*79;
+  if(sys){ //CM
+    Time_out=max_dist*2*29;
+  }else{  //INC
+    Time_out=max_dist*2*79;
   }
-  Reset_pin=0;
 }
 
-void Ultrasonic::onReset(int RP)
+void Ultrasonic::setResetPin(int RP)
 {
   pinMode(RP,OUTPUT);
   Reset_pin = RP;

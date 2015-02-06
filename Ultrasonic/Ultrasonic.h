@@ -21,8 +21,8 @@ class Ultrasonic
   public:
     Ultrasonic(int TP, int EP);
     Ultrasonic(int TP, int EP, long TO);
-    Ultrasonic(int TP, int EP, int sys, int MAX_DIST);
-    void onReset(int RP);
+    void setResetPin(int RP);
+    void setMaxDistance(int sys, int max_dist);
     long Timing();
     long Ranging(int sys);
 
